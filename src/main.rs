@@ -57,7 +57,7 @@ fn async_watcher() -> notify::Result<(RecommendedWatcher, Receiver<notify::Resul
     Ok((watcher, rx))
 }
 
-async fn read_unlocked(path: PathBuf) -> Result<Vec<u8>> {
+async fn read_unlocked(path: &PathBuf) -> Result<Vec<u8>> {
     let mut data: Option<Vec<u8>> = None;
     for _ in 0..100 {
         match fs::read(&path).await {
@@ -84,15 +84,20 @@ async fn read_unlocked(path: PathBuf) -> Result<Vec<u8>> {
 
 async fn upload_file(path: PathBuf, chat_id: String, token: String) -> Result<()> {
     let file_name = path.file_name().unwrap().to_owned();
-    info!("screenshot taken: {:?}", file_name);
+    info!("new file detected: {:?}", file_name);
 
     let bot = Bot::new(token);
-    let data = read_unlocked(path).await?;
+    let data = read_unlocked(&path).await?;
 
-    bot.send_photo(chat_id, InputFile::memory(data)).await?;
+    match path.extension().unwrap_or_default().to_str().unwrap() {
+        "png" | "jpg" | "jpeg" => bot.send_photo(chat_id, InputFile::memory(data)).await?,
+        "mp4" | "gif" | "mkv" => bot.send_video(chat_id, InputFile::memory(data)).await?,
+        _ => bot.send_document(chat_id, InputFile::memory(data)).await?,
+    };
+
     drop(bot);
 
-    info!("screenshot uploaded!: {:?}", file_name);
+    info!("file uploaded!: {:?}", file_name);
 
     Ok(())
 }
