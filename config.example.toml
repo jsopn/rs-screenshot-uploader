@@ -1,0 +1,11 @@
+# Paths of folders that gonna be watched by software
+path = [
+  'C:\Users\User\Pictures\VRChat', 
+  'C:\Users\jsopn\Pictures\Holoswtich'
+]
+
+# Bot token that you can get from @BotFather
+token = 'long_bot_token_string_from_botfater_in_telegram'
+
+# Telegram ChatID, you can get one using this bot - @getmy_idbot
+chat_id = ''

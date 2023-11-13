@@ -1,0 +1,16 @@
+{
+	"applications": [
+		{
+			"app_key": "jsopn.screenshotuploader",
+			"launch_type": "binary",
+			"binary_path_windows": "rs-screenshot-uploader.exe",
+			"is_dashboard_overlay": true,
+			"strings": {
+				"en_us": {
+					"name": "ScreenshotUploader",
+					"description": "Automatically uploads VRCHands screenshots to telegram"
+				}
+			}
+		}
+	]
+}
